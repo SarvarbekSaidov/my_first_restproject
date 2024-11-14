@@ -1,10 +1,16 @@
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import BlogCategoryViewSet, BlogAuthorViewSet, BlogPostViewSet, PostCommentViewSet
+from .views import BlogCategoryAPIView, BlogPostAPIView, BlogAuthorAPIView, PostCommentViewSet
 
 router = DefaultRouter()
-router.register(r'categories', BlogCategoryViewSet)
-router.register(r'authors', BlogAuthorViewSet)
-router.register(r'posts', BlogPostViewSet)
 router.register(r'comments', PostCommentViewSet)
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('categories/', BlogCategoryAPIView.as_view(), name='category-list'),
+    path('categories/<int:pk>/', BlogCategoryAPIView.as_view(), name='category-detail'),
+    path('posts/', BlogPostAPIView.as_view(), name='post-list'),
+    path('posts/<int:pk>/', BlogPostAPIView.as_view(), name='post-detail'),
+    path('authors/', BlogAuthorAPIView.as_view(), name='author-list'),
+    path('authors/<int:pk>/', BlogAuthorAPIView.as_view(), name='author-detail'),
+    path('', include(router.urls)),
+]
